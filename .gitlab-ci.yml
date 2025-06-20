@@ -5,10 +5,7 @@ services:
 
 variables:
   DOCKER_DRIVER: overlay2
-  DOCKER_TLS_CERTDIR: ""
-  AWS_REGION: ap-south-1
-  AWS_ACCOUNT_ID: 703671925616
-  ECR_REPOSITORY: angular-frontend
+  DOCKER_TLS_CERTDIR: ""  
   ECR_REGISTRY: $AWS_ACCOUNT_ID.dkr.ecr.$AWS_REGION.amazonaws.com
   IMAGE_TAG: $ECR_REGISTRY/$ECR_REPOSITORY:latest
 
