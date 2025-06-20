@@ -1,0 +1,33 @@
+image: docker:latest
+
+services:
+  - docker:dind
+
+variables:
+  DOCKER_DRIVER: overlay2
+  DOCKER_TLS_CERTDIR: ""
+  ECR_REGISTRY: $AWS_ACCOUNT_ID.dkr.ecr.$AWS_REGION.amazonaws.com
+  IMAGE_TAG: $ECR_REGISTRY/$ECR_REPOSITORY:latest
+
+before_script:
+  - apk add --no-cache aws-cli
+  - aws --version
+
+stages:
+  - build
+  - push
+
+build_image:
+  stage: build
+  script:
+    - echo "Building Docker image..."
+    - docker build -t $IMAGE_TAG .
+
+push_image:
+  stage: push
+  script:
+    - echo "Logging in to ECR..."
+    - aws ecr get-login-password --region $AWS_REGION | docker login --username AWS --password-stdin $ECR_REGISTRY
+    - echo "Pushing image to ECR..."
+    - docker push $IMAGE_TAG
+
