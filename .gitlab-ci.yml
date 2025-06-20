@@ -29,4 +29,4 @@ push_image:
     - echo "Logging in to ECR..."
     - aws ecr get-login-password --region $AWS_REGION | docker login --username AWS --password-stdin $ECR_REGISTRY
     - echo "Pushing image to ECR..."
-    - docker push $IMAGE_TAG
+    - docker push $IMAGE_TAG:latest
