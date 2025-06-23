@@ -14,6 +14,7 @@ variables:
 
 stages:
   - build_and_push
+  - deploy
 
 build_and_push:
   stage: build_and_push
