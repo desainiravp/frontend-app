@@ -31,13 +31,19 @@ build_and_push:
 
     - echo "Pushing Docker image to ECR..."
     - docker push "$IMAGE_TAG"
+
 deploy_to_eks:
   stage: deploy
-  image: amazon/aws-cli:latest
+  image: bitnami/kubectl:latest
+  before_script:
+    - apt-get update && apt-get install -y curl unzip
+    - curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
+    - unzip awscliv2.zip
+    - ./aws/install
   script:
-    - echo "Updating kubeconfig for EKS..."
-    - aws eks update-kubeconfig --region $AWS_REGION --name $CLUSTER_NAME
-
-    - echo "Deploying frontend to EKS..."
+    - echo "Configuring kubeconfig for EKS..."
+    - aws eks update-kubeconfig --region "$AWS_REGION" --name "$CLUSTER_NAME"
+    
+    - echo "Deploying Angular frontend to EKS..."
     - kubectl apply -f k8s/deployment.yaml
     - kubectl apply -f k8s/service.yaml
