@@ -30,3 +30,13 @@ build_and_push:
 
     - echo "Pushing Docker image to ECR..."
     - docker push "$IMAGE_TAG"
+deploy_to_eks:
+  stage: deploy
+  image: amazon/aws-cli:latest
+  script:
+    - echo "Updating kubeconfig for EKS..."
+    - aws eks update-kubeconfig --region $AWS_REGION --name $CLUSTER_NAME
+
+    - echo "Deploying frontend to EKS..."
+    - kubectl apply -f k8s/deployment.yaml
+    - kubectl apply -f k8s/service.yaml
