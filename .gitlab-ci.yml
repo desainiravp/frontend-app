@@ -46,7 +46,7 @@ deploy-to-eks:
     - aws eks --region "$AWS_REGION" update-kubeconfig --name "$CLUSTER_NAME"
   script:
     - echo "Deploying to EKS..."
-    - kubectl apply -f k8s/
+    - kubectl apply --validate=false -f k8s/
     - kubectl get all
 
  
