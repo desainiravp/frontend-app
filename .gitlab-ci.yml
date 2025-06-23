@@ -43,7 +43,7 @@ deploy-to-eks:
     - curl -LO https://dl.k8s.io/release/v1.32.3/bin/linux/amd64/kubectl
     - chmod +x kubectl && mv kubectl /usr/local/bin/
     - kubectl version --client
-    - aws eks --region "$AWS_REGION" update-kubeconfig --name "$EKS_CLUSTER_NAME"
+    - aws eks --region "$AWS_REGION" update-kubeconfig --name "$CLUSTER_NAME"
   script:
     - echo "Deploying to EKS..."
     - kubectl apply -f k8s/
