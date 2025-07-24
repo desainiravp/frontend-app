@@ -35,13 +35,13 @@ jobs:
     - name: Build and Push Docker Image to ECR
       run: |
         docker build -t $ECR_REPOSITORY .
-        docker tag $ECR_REPOSITORY:$IMAGE_TAG $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
-        docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
+        docker tag frontend-app:latest ${{ secrets.ECR_REGISTRY }}/frontend-app:latest
+        docker push ${{ secrets.ECR_REGISTRY }}/frontend-app:latest
 
     - name: Update kubeconfig to access EKS
       run: aws eks update-kubeconfig --region $AWS_REGION --name $CLUSTER_NAME
 
     - name: Apply Kubernetes manifests
       run: |
-        kubectl apply -f k8s/frontend-deployment.yaml
-        kubectl apply -f k8s/frontend-service.yaml
+        kubectl apply -f k8s/deployment.yaml
+        kubectl apply -f k8s/service.yaml
